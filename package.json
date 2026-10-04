@@ -1,0 +1,23 @@
+{
+  "name": "the-blind-spot-ai",
+  "version": "1.0.0",
+  "description": "An AI-powered cognitive decision & assumption discovery assistant built for PromptWars @ Hack2skill.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "hack2skill",
+    "promptwar",
+    "the-blind-spot",
+    "critical-thinking",
+    "cognitive-biases",
+    "decision-intelligence",
+    "gemini-ai"
+  ],
+  "author": "swarup kanekar (swap011)",
+  "license": "MIT"
+}

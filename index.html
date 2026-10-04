@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Blind Spot | AI Decision & Assumption Discovery Assistant</title>
+  <meta name="description" content="An AI-powered cognitive decision assistant that helps users uncover unstated assumptions, detect cognitive biases, and explore non-prescriptive probing questions. Built for PromptWars @ Hack2skill.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="header-navbar">
+    <div class="brand-wrapper">
+      <div class="brand-logo-icon">👁️</div>
+      <div class="brand-text">
+        <h1>THE BLIND SPOT</h1>
+        <div class="brand-tagline">Same Decisions. A Wider View.</div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button id="open-api-modal-btn" class="btn btn-outline btn-sm" title="Configure optional Google Gemini API Key">
+        ⚙️ Settings / LLM
+      </button>
+      <button id="export-audit-btn" class="btn btn-outline btn-sm" title="Export markdown decision brief">
+        📋 Export Audit
+      </button>
+      <a href="https://github.com/swap011/the-blind-spot-ai" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+        ⭐ GitHub Repo
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="hero-pill">
+      <span>🚀 PromptWars @ Hack2skill Finalist Project</span>
+    </div>
+    <h2 class="hero-title">
+      Identify What You Overlooked <span>Before You Commit</span>
+    </h2>
+    <p class="hero-subtitle">
+      People often decide based only on what is most visible. The Blind Spot unpacks your unstated assumptions, reveals cognitive biases, and poses calibrated Socratic questions without deciding for you.
+    </p>
+
+    <!-- Core Principle Notice -->
+    <div class="notice-card">
+      <div class="notice-icon">🛡️</div>
+      <div>
+        <strong>Strict Non-Prescriptive Mandate:</strong> This assistant never tells you what to choose or makes the decision for you. Its sole purpose is to widen your lens, stress-test reasoning, and help you think critically.
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Workspace Layout -->
+  <main class="main-layout">
+
+    <!-- Left Column: Input & Context Formulation -->
+    <section class="glass-panel" aria-label="Decision Input Form">
+      <div class="form-header">
+        <h2><span>🎯</span> Decision Context</h2>
+        <span class="badge badge-cyan">Interactive</span>
+      </div>
+
+      <!-- Benchmark Scenario Selector -->
+      <div class="form-group preset-selector">
+        <label for="preset-select" class="field-label">Load Benchmark Scenario</label>
+        <select id="preset-select" class="select-input">
+          <!-- Populated by JavaScript -->
+        </select>
+      </div>
+
+      <!-- Thinking Lens / Persona Selector -->
+      <div class="form-group">
+        <label class="field-label">Select Thinking Lens (Persona)</label>
+        <div id="persona-container" class="persona-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Context Input -->
+      <div class="form-group">
+        <label for="context-input" class="field-label">The Dilemma & Key Details</label>
+        <textarea id="context-input" class="textarea-input" placeholder="Describe the decision you are evaluating, the options, timeline, and current situation..."></textarea>
+      </div>
+
+      <!-- Reasoning Input -->
+      <div class="form-group">
+        <label for="reasoning-input" class="field-label">Your Current Reasoning & Primary Motivations</label>
+        <input type="text" id="reasoning-input" class="text-input" placeholder="e.g. Good stipend, 15 min from home, will add experience to resume">
+      </div>
+
+      <!-- Constraints Input -->
+      <div class="form-group">
+        <label for="constraints-input" class="field-label">Known Constraints & Non-Negotiables</label>
+        <input type="text" id="constraints-input" class="text-input" placeholder="e.g. Mandatory 75% college attendance, final exams in May">
+      </div>
+
+      <!-- Submit CTA -->
+      <button id="analyze-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.9rem; font-size: 1rem;">
+        ⚡ Reveal My Blind Spots
+      </button>
+    </section>
+
+    <!-- Right Column: Results & Cognitive Audit -->
+    <section aria-label="Analysis Results">
+      
+      <!-- Empty State -->
+      <div id="empty-state" class="glass-panel" style="text-align: center; padding: 4rem 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🔭</div>
+        <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">Ready to Stress-Test Your Reasoning</h3>
+        <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">
+          Select a preset scenario on the left or type your own dilemma, then click <strong>Reveal My Blind Spots</strong> to generate a multi-dimensional cognitive analysis.
+        </p>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="loading-indicator" class="glass-panel" style="display: none; text-align: center; padding: 4rem 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;" class="animate-float">⚙️</div>
+        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Scanning Cognitive Landscape...</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Deconstructing assumptions, checking cognitive biases, and formulating non-prescriptive inquiries.</p>
+        <div class="shimmer-loading" style="height: 12px; border-radius: 6px; max-width: 320px; margin: 1.5rem auto 0;"></div>
+      </div>
+
+      <!-- Results Zone -->
+      <div id="results-zone" class="results-container" style="display: none;">
+
+        <!-- Dashboard Metrics Bar -->
+        <div class="clarity-dashboard">
+          <div class="metric-card">
+            <div id="metric-total-blindspots" class="metric-value" style="color: var(--primary-light);">0</div>
+            <div class="metric-label">Blind Spots Found</div>
+          </div>
+          <div class="metric-card">
+            <div id="metric-assumptions" class="metric-value" style="color: var(--accent-amber);">0</div>
+            <div class="metric-label">Unstated Assumptions</div>
+          </div>
+          <div class="metric-card">
+            <div id="metric-biases" class="metric-value" style="color: var(--accent-rose);">0</div>
+            <div class="metric-label">Cognitive Biases</div>
+          </div>
+          <div class="metric-card">
+            <div id="metric-readiness" class="metric-value" style="color: var(--accent-cyan); font-size: 1.25rem; line-height: 1.5;">Examined</div>
+            <div class="metric-label">Audit Depth</div>
+          </div>
+        </div>
+
+        <!-- Executive Summary Card -->
+        <div class="analysis-section">
+          <div class="section-title">
+            <div class="title-left">
+              <span>🧭</span>
+              <span>Cognitive Lens Overview</span>
+            </div>
+            <span class="badge badge-cyan">Neutral Analysis</span>
+          </div>
+          <p id="analysis-summary-text" style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6;"></p>
+        </div>
+
+        <!-- 1. Unstated Assumptions Section -->
+        <div class="analysis-section">
+          <div class="section-title">
+            <div class="title-left">
+              <span>🔍</span>
+              <span>Unstated Assumptions Exposed</span>
+            </div>
+            <span class="badge badge-high">High Impact</span>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            These are premises you are taking for granted without direct empirical evidence. Verify each one before deciding.
+          </p>
+          <div id="assumptions-list"></div>
+        </div>
+
+        <!-- 2. Cognitive Biases Detected -->
+        <div class="analysis-section">
+          <div class="section-title">
+            <div class="title-left">
+              <span>🧠</span>
+              <span>Cognitive Biases & Heuristics</span>
+            </div>
+            <span class="badge badge-medium">Psychological Factors</span>
+          </div>
+          <div id="biases-list" class="bias-grid"></div>
+        </div>
+
+        <!-- 3. Overlooked Factors (2nd & 3rd Order) -->
+        <div class="analysis-section">
+          <div class="section-title">
+            <div class="title-left">
+              <span>🌊</span>
+              <span>Overlooked 2nd & 3rd Order Ripple Effects</span>
+            </div>
+            <span class="badge badge-cyan">Downstream Risks</span>
+          </div>
+          <div id="overlooked-list"></div>
+        </div>
+
+        <!-- 4. Reasoning Conflicts -->
+        <div class="analysis-section">
+          <div class="section-title">
+            <div class="title-left">
+              <span>⚖️</span>
+              <span>Reasoning Friction & Value Conflicts</span>
+            </div>
+            <span class="badge badge-medium">Internal Contradictions</span>
+          </div>
+          <div id="conflicts-list"></div>
+        </div>
+
+        <!-- 5. Calibrated Probing Questions -->
+        <div class="analysis-section">
+          <div class="section-title">
+            <div class="title-left">
+              <span>💬</span>
+              <span>Socratic Non-Prescriptive Probing Questions</span>
+            </div>
+            <span class="badge badge-low">Exploratory</span>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Use these questions to interview stakeholders, mentors, or yourself before taking action.
+          </p>
+          <div id="probing-questions-list"></div>
+        </div>
+
+        <!-- 6. Pre-Mortem Simulation -->
+        <div class="premortem-panel">
+          <div class="section-title" style="border-bottom-color: rgba(244, 63, 94, 0.2);">
+            <div class="title-left">
+              <span style="color: var(--accent-rose);">⚠️</span>
+              <span style="color: #fecdd3;">Pre-Mortem Simulation (Prospective Hindsight)</span>
+            </div>
+            <span class="badge badge-high">Worst-Case Stress Test</span>
+          </div>
+          <div id="premortem-content"></div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Gemini API Key Settings Modal -->
+  <div id="api-key-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="api-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="api-modal-title">⚙️ LLM Integration Settings</h3>
+        <button id="close-api-modal-btn" class="modal-close">&times;</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+        The Blind Spot works <strong>100% offline out of the box</strong> using its built-in cognitive heuristics engine. Optionally, provide a Google Gemini API Key to enable live generative reasoning augmentation.
+      </p>
+      <div class="form-group">
+        <label for="gemini-api-key-input" class="field-label">Google Gemini API Key (Stored Locally in Browser)</label>
+        <input type="password" id="gemini-api-key-input" class="text-input" placeholder="AIzaSy...">
+        <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.35rem;">
+          Your key is never sent to any third-party server. It is saved only in your browser's local storage.
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem;">
+        <button id="save-api-key-btn" class="btn btn-primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="export-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="export-modal-title">
+    <div class="modal-box" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 id="export-modal-title">📋 Decision Blind Spot Audit Report</h3>
+        <button id="close-export-modal-btn" class="modal-close">&times;</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+        Copy this formatted Markdown report to share with mentors, document your due diligence, or keep in your decision journal:
+      </p>
+      <textarea id="export-markdown-content" class="textarea-input" style="height: 280px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;" readonly></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+        <button id="copy-export-btn" class="btn btn-accent">Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>The Blind Spot</strong> &mdash; <em>Same Decisions. A Wider View.</em> | Developed for <strong>PromptWars @ Hack2skill</strong>
+    </p>
+    <p style="margin-top: 0.35rem; font-size: 0.75rem;">
+      Built with clean, dependency-free architecture | Accessible &bull; Non-Prescriptive &bull; MIT License
+    </p>
+  </footer>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
