@@ -2,6 +2,7 @@
 > **"Same Decisions. A Wider View."**  
 > *Developed for **PromptWars @ Hack2skill** (SVPCET Edition)*  
 > **Author:** Swarup Kanekar ([@swap011](https://github.com/swap011))  
+> **Live Deployed Web App:** [https://swap011.github.io/the-blind-spot-ai/](https://swap011.github.io/the-blind-spot-ai/)  
 > **Repository:** [https://github.com/swap011/the-blind-spot-ai](https://github.com/swap011/the-blind-spot-ai)  
 > **License:** MIT | **Footprint:** < 1 MB (Well below the 10 MB event limit)
 
